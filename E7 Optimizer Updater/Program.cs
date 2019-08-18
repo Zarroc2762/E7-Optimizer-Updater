@@ -39,6 +39,11 @@ namespace E7_Optimizer_Updater
         }
         static void Main(string[] args)
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                   | SecurityProtocolType.Tls11
+                   | SecurityProtocolType.Tls12
+                   | SecurityProtocolType.Ssl3;
             WebClient client = new WebClient();
             client.Headers.Add(HttpRequestHeader.UserAgent, "E7 Optimizer Updater");
             Console.WriteLine("Checking for updates...");
@@ -98,7 +103,7 @@ namespace E7_Optimizer_Updater
                     {
                         if (File.Exists(entry.Key))
                         {
-                            if (!IsFileLocked(new FileInfo(entry.Key)))
+                            if (!IsFileLocked(new FileInfo(entry.Key)) && entry.Key != "E7 Optimizer Updater.exe")
                             {
                                 entry.WriteToDirectory(".\\", new ExtractionOptions()
                                 {
